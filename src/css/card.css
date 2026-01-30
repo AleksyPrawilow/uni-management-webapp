@@ -1,0 +1,44 @@
+.card {
+  background-color: rgb(243, 243, 243);
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 16px;
+  margin: 4px;
+  flex: 1 1 0;
+  transition: all 0.2s;
+}
+
+.card-title {
+  font-size: 2rem;
+  color: black;
+  margin: 2px;
+  font-weight: bold;
+}
+
+.card-caption {
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  margin: 2px;
+  font-size: 1rem;
+  color: black;
+  box-sizing: border-box;
+}
+
+.card-icon {
+  min-width: 24;
+  min-height: 24;
+  border-radius: 50%;
+  padding: 12px;
+  transition: all 0.2s;
+}
+
+.card-icon:hover {
+  background-color: gainsboro;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
