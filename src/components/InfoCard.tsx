@@ -1,36 +1,28 @@
 /// <reference types="vite-plugin-svgr/client" />
 
-import { ChevronRight } from '@mui/icons-material';
 import {
   Box,
   Card,
   CardActionArea,
   CardContent,
-  IconButton,
   Stack,
   Typography,
 } from '@mui/material';
 import React from 'react';
 
-interface Prop<T> {
-  object: T;
+interface Prop {
   title: string;
   caption: string;
   caption2: React.ReactNode | null;
-  onClick: (newEdited: T) => void;
+  buttons: React.ReactNode;
+  onClick: () => void;
 }
 
-export function InfoCard<T>({
-  object,
-  title,
-  caption,
-  caption2,
-  onClick,
-}: Prop<T>) {
+export function InfoCard({ title, caption, caption2, buttons, onClick }: Prop) {
   return (
     <>
-      <Card elevation={2} sx={{ borderRadius: 3 }}>
-        <CardActionArea onClick={() => onClick(object)}>
+      <Card elevation={2} sx={{ borderRadius: 3 }} onClick={onClick}>
+        <CardActionArea onClick={() => {}}>
           <Box sx={{ display: 'flex', alignItems: 'stretch' }}>
             {caption2 != null && (
               <Box
@@ -62,9 +54,7 @@ export function InfoCard<T>({
                 <Typography variant="body2">{caption}</Typography>
               </Stack>
 
-              <IconButton size="large">
-                <ChevronRight />
-              </IconButton>
+              {buttons}
             </CardContent>
           </Box>
         </CardActionArea>

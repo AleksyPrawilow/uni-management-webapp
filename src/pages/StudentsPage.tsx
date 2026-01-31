@@ -4,12 +4,18 @@ import { AnimatePresence, backOut, motion } from 'framer-motion';
 import { useState } from 'react';
 import { InfoCard } from '../components/InfoCard';
 import toast, { Toaster } from 'react-hot-toast';
-import { CircularProgress, Stack } from '@mui/material';
+import {
+  Button,
+  CircularProgress,
+  Stack,
+  useMediaQuery,
+  useTheme,
+} from '@mui/material';
 import { HeaderCard } from '../components/HeaderCard';
 import type { Student } from '../types/student';
 import { StudentCreateDrawer } from '../components/StudentCreateDrawer';
 import { StudentEditDrawer } from '../components/StudentEditDrawer';
-import { Person } from '@mui/icons-material';
+import { ChevronRight, Person } from '@mui/icons-material';
 import { useStudents } from '../hooks/UseStudents';
 import { LoadingBackdrop } from '../components/LoadingBackdrop';
 import { FailedToLoad } from '../components/FailedToLoad';
@@ -19,6 +25,8 @@ export function StudentsPage() {
   const [isEditMenuOpened, setIsEditMenuOpened] = useState(false);
   const [editedStudent, setEditedStudent] = useState<Student | null>(null);
   const [showBackdrop, setShowBackdrop] = useState(false);
+  const theme = useTheme();
+  const isSmall = useMediaQuery(theme.breakpoints.down('sm'));
   const {
     students,
     courses,
@@ -126,8 +134,7 @@ export function StudentsPage() {
             {students.map((student) => {
               return (
                 <motion.div key={student.id} variants={item}>
-                  <InfoCard<Student>
-                    object={student}
+                  <InfoCard
                     title={student.first_name + ' ' + student.last_name}
                     caption={'Age: ' + student.age.toString() + ' years old'}
                     caption2={
@@ -136,8 +143,22 @@ export function StudentsPage() {
                         sx={{ width: 32, height: 32, p: 1 }}
                       />
                     }
-                    onClick={(newEditedStudent: Student) => {
-                      setEditedStudent(newEditedStudent);
+                    buttons={
+                      <Button
+                        size="large"
+                        variant="contained"
+                        color="primary"
+                        endIcon={<ChevronRight />}
+                        onClick={() => {
+                          setEditedStudent(student);
+                          setIsEditMenuOpened(true);
+                        }}
+                      >
+                        {!isSmall && 'Edit'}
+                      </Button>
+                    }
+                    onClick={() => {
+                      setEditedStudent(student);
                       setIsEditMenuOpened(true);
                     }}
                   />
@@ -177,7 +198,6 @@ export function StudentsPage() {
             key="loader"
             initial={{ opacity: 0, scale: 0.5 }}
             animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.5 }}
             transition={{ duration: 0.3 }}
             style={{
               display: 'flex',

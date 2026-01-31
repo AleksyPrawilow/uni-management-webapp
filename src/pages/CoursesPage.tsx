@@ -7,19 +7,34 @@ import { InfoCard } from '../components/InfoCard';
 import toast, { Toaster } from 'react-hot-toast';
 import { CourseEditDrawer } from '../components/CourseEditDrawer';
 import { CourseCreateDrawer } from '../components/CourseCreateDrawer';
-import { CircularProgress, Divider, Stack, Typography } from '@mui/material';
+import {
+  Button,
+  CircularProgress,
+  Divider,
+  Stack,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from '@mui/material';
 import { HeaderCard } from '../components/HeaderCard';
 import { useCourses } from '../hooks/UseCourses';
 import dayjs from 'dayjs';
 import { ClockIcon } from '@mui/x-date-pickers';
 import { LoadingBackdrop } from '../components/LoadingBackdrop';
 import { FailedToLoad } from '../components/FailedToLoad';
+import { CourseModal } from '../components/CourseModal';
+import { ChevronRight, People } from '@mui/icons-material';
 
 export function CoursesPage() {
   const [isCreationMenuOpened, setIsCreationMenuOpened] = useState(false);
   const [isEditMenuOpened, setIsEditMenuOpened] = useState(false);
   const [editedCourse, setEditedCourse] = useState<Course | null>(null);
+  const [selectedParticipants, setSelectedParticipants] =
+    useState<Course | null>(null);
   const [showBackdrop, setShowBackdrop] = useState(false);
+  const [showStudents, setShowStudents] = useState(false);
+  const theme = useTheme();
+  const isSmall = useMediaQuery(theme.breakpoints.down('sm'));
   const {
     courses,
     loading,
@@ -49,6 +64,14 @@ export function CoursesPage() {
       <Toaster position="bottom-center" />
 
       <LoadingBackdrop open={showBackdrop} />
+
+      {selectedParticipants != null && (
+        <CourseModal
+          open={showStudents}
+          onClose={() => setShowStudents(false)}
+          courseId={selectedParticipants.id}
+        />
+      )}
 
       <CourseCreateDrawer
         open={isCreationMenuOpened}
@@ -125,8 +148,7 @@ export function CoursesPage() {
             {courses.map((course) => {
               return (
                 <motion.div key={course.id} variants={item}>
-                  <InfoCard<Course>
-                    object={course}
+                  <InfoCard
                     title={course.course_name}
                     caption={course.course_description}
                     caption2={
@@ -155,9 +177,38 @@ export function CoursesPage() {
                         </Typography>
                       </Stack>
                     }
-                    onClick={(newEditedCourse: Course) => {
-                      setEditedCourse(newEditedCourse);
-                      setIsEditMenuOpened(true);
+                    buttons={
+                      <Stack direction="row" spacing={2}>
+                        <Button
+                          size="large"
+                          variant="contained"
+                          color="primary"
+                          endIcon={<People />}
+                          onClick={() => {
+                            setSelectedParticipants(course);
+                            setShowStudents(true);
+                          }}
+                        >
+                          {!isSmall && 'Students'}
+                        </Button>
+                        <Button
+                          size="large"
+                          variant="contained"
+                          color="primary"
+                          endIcon={<ChevronRight />}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setEditedCourse(course);
+                            setIsEditMenuOpened(true);
+                          }}
+                        >
+                          {!isSmall && 'Edit'}
+                        </Button>
+                      </Stack>
+                    }
+                    onClick={() => {
+                      setSelectedParticipants(course);
+                      setShowStudents(true);
                     }}
                   />
                 </motion.div>
