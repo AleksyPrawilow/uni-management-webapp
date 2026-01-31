@@ -2,7 +2,6 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { HomePage } from './pages/HomePage';
 import { CoursesPage } from './pages/CoursesPage';
 import { StudentsPage } from './pages/StudentsPage';
-import { EnrollmentsPage } from './pages/EnrollmentsPage';
 import { NotFoundPage } from './pages/NotFoundPage';
 import { Box } from '@mui/material';
 import { NavigationDrawer } from './components/NavigationDrawer';
@@ -23,7 +22,6 @@ function App() {
               <Route path="/" element={<HomePage />} />
               <Route path="/courses" element={<CoursesPage />} />
               <Route path="/students" element={<StudentsPage />} />
-              <Route path="/enrollments" element={<EnrollmentsPage />} />
               <Route path="*" element={<NotFoundPage />} />
             </Routes>
           </Box>

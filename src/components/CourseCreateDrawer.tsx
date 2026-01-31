@@ -37,7 +37,11 @@ export function CourseCreateDrawer({
           sx={{ minWidth: 400, padding: 1 }}
           spacing={2}
         >
-          <Typography variant="h4" sx={{ padding: 2, textAlign: 'center' }}>
+          <Typography
+            variant="h4"
+            fontWeight="bold"
+            sx={{ padding: 2, textAlign: 'center' }}
+          >
             Create a course
           </Typography>
 

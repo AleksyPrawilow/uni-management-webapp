@@ -1,4 +1,4 @@
-import { Home, School, Person, Assignment } from '@mui/icons-material';
+import { Home, School, Person } from '@mui/icons-material';
 import { useTheme } from '@mui/material/styles';
 import {
   Drawer,
@@ -19,7 +19,6 @@ export function NavigationDrawer() {
     { text: 'Home', icon: <Home />, path: '/' },
     { text: 'Courses', icon: <School />, path: '/courses' },
     { text: 'Students', icon: <Person />, path: '/students' },
-    { text: 'Enrollments', icon: <Assignment />, path: '/enrollments' },
   ];
   return (
     <>

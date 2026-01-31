@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import { createClient } from '@supabase/supabase-js';
 import type { Student } from '../types/student';
+import type { Course } from '../types/course';
 
 const supabase = createClient(
   import.meta.env.VITE_SUPABASE_URL,
@@ -9,6 +10,7 @@ const supabase = createClient(
 );
 
 export function useStudents() {
+  const [courses, setCourses] = useState<Course[]>([]);
   const [students, setStudents] = useState<Student[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -16,6 +18,17 @@ export function useStudents() {
   async function fetchStudents() {
     setError(null);
     setLoading(true);
+
+    {
+      const { error, data } = await supabase.from('courses').select('*');
+      if (error) {
+        setError(error.message);
+        setLoading(false);
+        return;
+      }
+      setCourses(data);
+    }
+
     const { error, data } = await supabase.from('students').select('*');
     if (error) {
       setError(error.message);
@@ -83,6 +96,7 @@ export function useStudents() {
 
   return {
     students,
+    courses,
     loading,
     error,
     refreshStudents: fetchStudents,

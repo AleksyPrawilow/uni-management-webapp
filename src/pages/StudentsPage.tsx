@@ -21,6 +21,7 @@ export function StudentsPage() {
   const [showBackdrop, setShowBackdrop] = useState(false);
   const {
     students,
+    courses,
     loading,
     error,
     refreshStudents,
@@ -76,6 +77,7 @@ export function StudentsPage() {
       <StudentEditDrawer
         open={isEditMenuOpened}
         student={editedStudent}
+        courses={courses}
         onClose={() => setIsEditMenuOpened(false)}
         onError={(message: string) => toast.error(message)}
         onDelete={(studentId: number) => {
@@ -102,7 +104,7 @@ export function StudentsPage() {
               setShowBackdrop(false);
             },
             () => {
-              toast.success('Updated a course!');
+              toast.success('Updated a student!');
               setShowBackdrop(false);
             }
           );

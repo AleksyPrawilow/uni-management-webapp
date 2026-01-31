@@ -1,9 +1,9 @@
-import { Button, Card, CardContent, Stack, Typography } from '@mui/material';
+import { Button, Card, Stack, Typography } from '@mui/material';
 import { Add } from '@mui/icons-material';
 
 interface Props {
   text: string;
-  buttonTitle: string;
+  buttonTitle: string | null;
   buttonAction: () => void;
 }
 
@@ -31,14 +31,16 @@ export function HeaderCard({ text, buttonTitle, buttonAction }: Props) {
           <Typography variant="h4" fontWeight="bold" textAlign={'center'}>
             {text}
           </Typography>
-          <Button
-            variant="contained"
-            color="secondary"
-            endIcon={<Add />}
-            onClick={() => buttonAction()}
-          >
-            {buttonTitle}
-          </Button>
+          {buttonTitle != null && (
+            <Button
+              variant="contained"
+              color="secondary"
+              endIcon={<Add />}
+              onClick={() => buttonAction()}
+            >
+              {buttonTitle}
+            </Button>
+          )}
         </Stack>
       </Card>
     </>

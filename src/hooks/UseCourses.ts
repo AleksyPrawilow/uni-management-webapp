@@ -9,7 +9,6 @@ const supabase = createClient(
 );
 
 const validateCourse = (newCourse: Course, prevCourses: Course[]) => {
-  console.log(prevCourses.map((item) => item.course_name));
   if (
     prevCourses.map((item) => item.course_name).includes(newCourse.course_name)
   ) {
