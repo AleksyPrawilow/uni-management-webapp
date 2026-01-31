@@ -31,6 +31,7 @@ export function useCourses() {
       setLoading(false);
       return;
     }
+
     setCourses(data);
     setLoading(false);
   }
@@ -64,11 +65,20 @@ export function useCourses() {
       onError(validationResult.message);
       return;
     }
-    const { error } = await supabase.from('courses').insert(newCourse);
+    const { error, data } = await supabase
+      .from('courses')
+      .insert({
+        course_name: newCourse.course_name,
+        course_description: newCourse.course_description,
+        start_time: newCourse.start_time,
+        class_duration: newCourse.class_duration,
+      })
+      .select('*');
     if (error) {
       onError(error.message);
       return;
     }
+    newCourse.id = data[0].id;
     setCourses((prev) => [...prev, newCourse]);
     onSuccess();
   }

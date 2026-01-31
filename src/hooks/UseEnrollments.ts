@@ -78,16 +78,17 @@ export function useEnrollments() {
       onError(validationResult.message);
       return;
     }
-    const { error } = await supabase
+    const { error, data } = await supabase
       .from('enrollments')
-      .insert({ course_id: course.id, student_id: student.id });
+      .insert({ course_id: course.id, student_id: student.id })
+      .select('*');
     if (error) {
       onError(error.message);
       return;
     }
     setEnrollments((prev) => [
       ...prev,
-      { id: newId, student_id: student.id, course_id: course.id },
+      { id: data[0].id, student_id: student.id, course_id: course.id },
     ]);
     onSuccess();
   }

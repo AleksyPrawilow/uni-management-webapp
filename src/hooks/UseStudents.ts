@@ -63,11 +63,19 @@ export function useStudents() {
     onError: (message: string) => void,
     onSuccess: () => void
   ) {
-    const { error } = await supabase.from('students').insert(newStudent);
+    const { error, data } = await supabase
+      .from('students')
+      .insert({
+        first_name: newStudent.first_name,
+        last_name: newStudent.last_name,
+        age: newStudent.age,
+      })
+      .select('*');
     if (error) {
       onError(error.message);
       return;
     }
+    newStudent.id = data[0].id;
     setStudents((prev) => [...prev, newStudent]);
     onSuccess();
   }
