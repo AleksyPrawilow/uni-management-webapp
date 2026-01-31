@@ -4,7 +4,14 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs, { Dayjs } from 'dayjs';
 import { Send } from '@mui/icons-material';
 
-import { Drawer, Button, Stack, Typography, TextField } from '@mui/material';
+import {
+  Drawer,
+  Button,
+  Stack,
+  Typography,
+  TextField,
+  Box,
+} from '@mui/material';
 import type { Course } from '../types/course';
 
 interface Prop {
@@ -35,60 +42,70 @@ export function CourseCreateDrawer({
           sx={{ minWidth: 400, padding: 1 }}
           spacing={2}
         >
-          <Typography
-            variant="h4"
-            fontWeight="bold"
-            sx={{ padding: 2, textAlign: 'center' }}
+          <Box
+            sx={{
+              p: 1,
+              mb: 2,
+              bgcolor: '#f6f6f6',
+              borderRadius: 3,
+              boxShadow: 2,
+            }}
           >
-            Create a course
-          </Typography>
+            <Stack spacing={2}>
+              <Typography variant="h5" fontWeight="bold">
+                Create a Course
+              </Typography>
+              <TextField
+                label="Course name"
+                value={courseName}
+                onChange={(e) => {
+                  setCourseName(e.target.value);
+                }}
+                variant="outlined"
+                fullWidth
+              />
 
-          <TextField
-            label="Course name"
-            value={courseName}
-            onChange={(e) => {
-              setCourseName(e.target.value);
-            }}
-            variant="outlined"
-          />
+              <TextField
+                label="Course description"
+                value={courseDescription}
+                onChange={(e) => {
+                  setCourseDescription(e.target.value);
+                }}
+                multiline
+                minRows={3}
+                maxRows={6}
+                variant="outlined"
+                fullWidth
+              />
 
-          <TextField
-            label="Course description"
-            value={courseDescription}
-            onChange={(e) => {
-              setCourseDescription(e.target.value);
-            }}
-            multiline
-            minRows={3}
-            maxRows={6}
-            variant="outlined"
-          />
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <TimePicker
+                  label="Select time"
+                  value={startTime}
+                  onChange={setStartTime}
+                  ampm={false}
+                />
+              </LocalizationProvider>
 
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <TimePicker
-              label="Select time"
-              value={startTime}
-              onChange={setStartTime}
-              ampm={false}
-            />
-          </LocalizationProvider>
-
-          <TextField
-            label="Duration (minutes)"
-            type="number"
-            value={classDuration}
-            onChange={(e) => {
-              const val = Number(e.target.value);
-              if (val >= 15 && val <= 180) {
-                setClassDuration(val);
-              }
-            }}
-            inputProps={{
-              min: 15,
-              max: 180,
-              step: 15, // optional: increment by 5
-            }}
-          />
+              <TextField
+                label="Duration (minutes)"
+                type="number"
+                value={classDuration}
+                onChange={(e) => {
+                  const val = Number(e.target.value);
+                  if (val >= 15 && val <= 180) {
+                    setClassDuration(val);
+                  }
+                }}
+                inputProps={{
+                  min: 15,
+                  max: 180,
+                  step: 15,
+                }}
+                fullWidth
+              />
+            </Stack>
+          </Box>
 
           <Button
             variant="contained"
@@ -117,7 +134,7 @@ export function CourseCreateDrawer({
               setClassDuration(45);
             }}
           >
-            Create this course
+            Create
           </Button>
         </Stack>
       </Drawer>

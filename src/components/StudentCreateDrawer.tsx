@@ -1,7 +1,14 @@
 import { useState } from 'react';
 import { Send } from '@mui/icons-material';
 
-import { Drawer, Button, Stack, Typography, TextField } from '@mui/material';
+import {
+  Drawer,
+  Button,
+  Stack,
+  Typography,
+  TextField,
+  Box,
+} from '@mui/material';
 import type { Student } from '../types/student';
 
 interface Prop {
@@ -31,41 +38,40 @@ export function StudentCreateDrawer({
           sx={{ minWidth: 400, padding: 1 }}
           spacing={2}
         >
-          <Typography
-            variant="h4"
-            fontWeight="bold"
-            sx={{ padding: 2, textAlign: 'center' }}
+          <Box
+            sx={{
+              p: 1,
+              mb: 2,
+              bgcolor: '#f6f6f6',
+              borderRadius: 3,
+              boxShadow: 2,
+            }}
           >
-            Add a student
-          </Typography>
-
-          <TextField
-            label="Student First Name"
-            value={studentName}
-            onChange={(e) => {
-              setStudentName(e.target.value);
-            }}
-            variant="outlined"
-          />
-
-          <TextField
-            label="Student Last Name"
-            value={studentLastName}
-            onChange={(e) => {
-              setStudentLastName(e.target.value);
-            }}
-            variant="outlined"
-          />
-
-          <TextField
-            label="Student Age"
-            type="number"
-            value={studentAge}
-            onChange={(e) => {
-              const val = Number(e.target.value);
-              setStudentAge(val);
-            }}
-          />
+            <Stack spacing={2}>
+              <Typography variant="h5" fontWeight="bold">
+                Basic Info
+              </Typography>
+              <TextField
+                label="First Name"
+                value={studentName}
+                onChange={(e) => setStudentName(e.target.value)}
+                fullWidth
+              />
+              <TextField
+                label="Last Name"
+                value={studentLastName}
+                onChange={(e) => setStudentLastName(e.target.value)}
+                fullWidth
+              />
+              <TextField
+                label="Age"
+                type="number"
+                value={studentAge}
+                onChange={(e) => setStudentAge(Number(e.target.value))}
+                fullWidth
+              />
+            </Stack>
+          </Box>
 
           <Button
             variant="contained"
@@ -86,7 +92,7 @@ export function StudentCreateDrawer({
               setStudentAge(18);
             }}
           >
-            Add this student
+            Create
           </Button>
         </Stack>
       </Drawer>

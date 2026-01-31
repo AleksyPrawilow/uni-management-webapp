@@ -15,7 +15,7 @@ export function HeaderCard({ text, buttonTitle, buttonAction }: Props) {
           width: '100%',
           bgcolor: 'primary.main',
           color: 'primary.contrastText',
-          borderRadius: 2,
+          borderRadius: 3,
           boxShadow: 5,
         }}
       >
@@ -37,6 +37,7 @@ export function HeaderCard({ text, buttonTitle, buttonAction }: Props) {
               color="secondary"
               endIcon={<Add />}
               onClick={() => buttonAction()}
+              sx={{ borderRadius: 3 }}
             >
               {buttonTitle}
             </Button>
