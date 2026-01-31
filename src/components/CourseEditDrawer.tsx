@@ -25,33 +25,31 @@ export function CourseEditDrawer({
   onSubmit,
   onDelete,
 }: Prop) {
-  const [courseName, setCourseName] = useState(course?.courseName);
+  const [courseName, setCourseName] = useState(course?.course_name);
   const [courseDescription, setCourseDescription] = useState(
-    course?.courseDescription
+    course?.course_description
   );
   const [startTime, setStartTime] = useState<Dayjs | null>(
-    course?.startTime ? dayjs(course.startTime, 'HH:mm') : null
+    course?.start_time ? dayjs(course.start_time, 'HH:mm') : null
   );
-  const [classDuration, setClassDuration] = useState(
-    course?.courseClassDuration
-  );
+  const [classDuration, setClassDuration] = useState(course?.class_duration);
 
   useEffect(() => {
     if (open) {
       // eslint-disable-next-line react-hooks/set-state-in-effect
-      setCourseName(course?.courseName);
-      setCourseDescription(course?.courseDescription);
+      setCourseName(course?.course_name);
+      setCourseDescription(course?.course_description);
       setStartTime(
-        course?.startTime ? dayjs(course?.startTime, 'HH:mm') : null
+        course?.start_time ? dayjs(course?.start_time, 'HH:mm') : null
       );
-      setClassDuration(course?.courseClassDuration);
+      setClassDuration(course?.class_duration);
     }
   }, [
     open,
-    course?.courseDescription,
-    course?.courseName,
-    course?.startTime,
-    course?.courseClassDuration,
+    course?.course_description,
+    course?.course_name,
+    course?.start_time,
+    course?.class_duration,
   ]);
 
   return (
@@ -129,11 +127,11 @@ export function CourseEditDrawer({
               }
               const formattedTime: string = startTime.format('HH:mm');
               onSubmit({
-                courseId: course.courseId,
-                courseName: courseName,
-                courseDescription: courseDescription,
-                startTime: formattedTime,
-                courseClassDuration: classDuration,
+                id: course.id,
+                course_name: courseName,
+                course_description: courseDescription,
+                start_time: formattedTime,
+                class_duration: classDuration,
               });
             }}
           >
@@ -142,7 +140,7 @@ export function CourseEditDrawer({
           <Button
             variant="contained"
             endIcon={<Delete />}
-            onClick={() => onDelete(course?.courseId ? course.courseId : -1)}
+            onClick={() => onDelete(course?.id ? course.id : -1)}
           >
             Delete this course
           </Button>

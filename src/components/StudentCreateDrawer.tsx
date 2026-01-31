@@ -72,10 +72,10 @@ export function StudentCreateDrawer({
                 return;
               }
               onSubmit({
-                studentId: nextId,
-                studentFirstName: studentName,
-                studentLastName: studentLastName,
-                studentAge: studentAge,
+                id: nextId,
+                first_name: studentName,
+                last_name: studentLastName,
+                age: studentAge,
               });
               setStudentName('');
               setStudentLastName('');

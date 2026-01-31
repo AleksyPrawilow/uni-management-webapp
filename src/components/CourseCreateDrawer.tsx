@@ -103,11 +103,11 @@ export function CourseCreateDrawer({
               }
               const formattedTime: string = startTime.format('HH:mm');
               onSubmit({
-                courseId: nextId,
-                courseName: courseName,
-                courseDescription: courseDescription,
-                startTime: formattedTime,
-                courseClassDuration: classDuration,
+                id: nextId,
+                course_name: courseName,
+                course_description: courseDescription,
+                start_time: formattedTime,
+                class_duration: classDuration,
               });
               setCourseName('');
               setCourseDescription('');

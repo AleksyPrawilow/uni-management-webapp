@@ -22,25 +22,18 @@ export function StudentEditDrawer({
   onSubmit,
   onDelete,
 }: Prop) {
-  const [studentName, setStudentName] = useState(student?.studentFirstName);
-  const [studentLastName, setStudentLastName] = useState(
-    student?.studentLastName
-  );
-  const [studentAge, setStudentAge] = useState(student?.studentAge);
+  const [studentName, setStudentName] = useState(student?.first_name);
+  const [studentLastName, setStudentLastName] = useState(student?.last_name);
+  const [studentAge, setStudentAge] = useState(student?.age);
 
   useEffect(() => {
     if (open) {
       // eslint-disable-next-line react-hooks/set-state-in-effect
-      setStudentName(student?.studentFirstName);
-      setStudentLastName(student?.studentLastName);
-      setStudentAge(student?.studentAge);
+      setStudentName(student?.first_name);
+      setStudentLastName(student?.last_name);
+      setStudentAge(student?.age);
     }
-  }, [
-    open,
-    student?.studentFirstName,
-    student?.studentLastName,
-    student?.studentAge,
-  ]);
+  }, [open, student?.first_name, student?.last_name, student?.age]);
 
   return (
     <div>
@@ -91,10 +84,10 @@ export function StudentEditDrawer({
                 return;
               }
               onSubmit({
-                studentId: student?.studentId,
-                studentFirstName: studentName,
-                studentLastName: studentLastName,
-                studentAge: studentAge,
+                id: student?.id,
+                first_name: studentName,
+                last_name: studentLastName,
+                age: studentAge,
               });
             }}
           >
@@ -103,9 +96,7 @@ export function StudentEditDrawer({
           <Button
             variant="contained"
             endIcon={<Delete />}
-            onClick={() =>
-              onDelete(student?.studentId ? student.studentId : -1)
-            }
+            onClick={() => onDelete(student?.id ? student.id : -1)}
           >
             Delete this student
           </Button>

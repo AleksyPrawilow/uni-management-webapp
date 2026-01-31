@@ -1,52 +1,34 @@
 /// <reference types="vite-plugin-svgr/client" />
 
-import { backOut, motion } from 'framer-motion';
+import { AnimatePresence, backOut, motion } from 'framer-motion';
 import { useState } from 'react';
 import type { Course } from '../types/course';
 import { InfoCard } from '../components/InfoCard';
 import toast, { Toaster } from 'react-hot-toast';
 import { CourseEditDrawer } from '../components/CourseEditDrawer';
 import { CourseCreateDrawer } from '../components/CourseCreateDrawer';
-import { Stack } from '@mui/material';
+import { CircularProgress, Divider, Stack, Typography } from '@mui/material';
 import { HeaderCard } from '../components/HeaderCard';
-
-const validateCourse = (newCourse: Course, prevCourses: Course[]) => {
-  console.log(prevCourses.map((item) => item.courseName));
-  if (
-    prevCourses.map((item) => item.courseName).includes(newCourse.courseName)
-  ) {
-    return { result: false, message: 'Course name must be unique.' };
-  }
-  return { result: true, message: '' };
-};
+import { useCourses } from '../hooks/UseCourses';
+import dayjs from 'dayjs';
+import { ClockIcon } from '@mui/x-date-pickers';
+import { LoadingBackdrop } from '../components/LoadingBackdrop';
+import { FailedToLoad } from '../components/FailedToLoad';
 
 export function CoursesPage() {
   const [isCreationMenuOpened, setIsCreationMenuOpened] = useState(false);
   const [isEditMenuOpened, setIsEditMenuOpened] = useState(false);
   const [editedCourse, setEditedCourse] = useState<Course | null>(null);
-  const [courses, setCourses] = useState([
-    {
-      courseId: 1,
-      courseName: 'Test course 1',
-      courseDescription: 'Description',
-      startTime: '10:00',
-      courseClassDuration: 45,
-    },
-    {
-      courseId: 2,
-      courseName: 'Test course 2',
-      courseDescription: 'Description',
-      startTime: '12:00',
-      courseClassDuration: 45,
-    },
-    {
-      courseId: 3,
-      courseName: 'Test course 3',
-      courseDescription: 'Description',
-      startTime: '12:00',
-      courseClassDuration: 45,
-    },
-  ]);
+  const [showBackdrop, setShowBackdrop] = useState(false);
+  const {
+    courses,
+    loading,
+    error,
+    refreshCourses,
+    updateCourse,
+    createCourse,
+    deleteCourse,
+  } = useCourses();
 
   const container = {
     hidden: {},
@@ -65,22 +47,31 @@ export function CoursesPage() {
   return (
     <>
       <Toaster position="bottom-center" />
+
+      <LoadingBackdrop open={showBackdrop} />
+
       <CourseCreateDrawer
         open={isCreationMenuOpened}
         nextId={Math.max(
-          Math.max(...courses.map((item: Course) => item.courseId)) + 1,
+          Math.max(...courses.map((item: Course) => item.id)) + 1,
           1
         )}
         onClose={() => setIsCreationMenuOpened(false)}
         onError={(message: string) => toast.error(message)}
         onSubmit={(newCourse: Course) => {
-          if (!validateCourse(newCourse, courses).result) {
-            toast.error(validateCourse(newCourse, courses).message);
-            return;
-          }
           setIsCreationMenuOpened(false);
-          setCourses((prev) => [...prev, newCourse]);
-          toast.success('Added a course!');
+          setShowBackdrop(true);
+          createCourse(
+            newCourse,
+            (message) => {
+              toast.error(message);
+              setShowBackdrop(false);
+            },
+            () => {
+              toast.success('Added a course!');
+              setShowBackdrop(false);
+            }
+          );
         }}
       />
       <CourseEditDrawer
@@ -89,19 +80,33 @@ export function CoursesPage() {
         onClose={() => setIsEditMenuOpened(false)}
         onError={(message: string) => toast.error(message)}
         onDelete={(courseId: number) => {
-          setCourses((prev) =>
-            prev.filter((course) => course.courseId !== courseId)
-          );
           setIsEditMenuOpened(false);
-          toast.success('Deleted a course!');
+          setShowBackdrop(true);
+          deleteCourse(
+            courseId,
+            (message: string) => {
+              toast.error(message);
+              setShowBackdrop(false);
+            },
+            () => {
+              toast.success('Deleted a course!');
+              setShowBackdrop(false);
+            }
+          );
         }}
         onSubmit={(updatedCourse: Course) => {
-          setCourses((prev) =>
-            prev.map((c) =>
-              c.courseId === updatedCourse.courseId ? updatedCourse : c
-            )
+          setShowBackdrop(true);
+          updateCourse(
+            updatedCourse,
+            (message: string) => {
+              toast.error(message);
+              setShowBackdrop(false);
+            },
+            () => {
+              toast.success('Updated a course!');
+              setShowBackdrop(false);
+            }
           );
-          toast.success('Updated a course!');
         }}
       />
       <HeaderCard
@@ -110,25 +115,95 @@ export function CoursesPage() {
         buttonAction={() => setIsCreationMenuOpened(true)}
       />
 
-      <motion.div variants={container} initial="hidden" animate="show">
-        <Stack direction="column" spacing={2} sx={{ mt: 2 }}>
-          {courses.map((course) => {
-            return (
-              <motion.div key={course.courseId} variants={item}>
-                <InfoCard<Course>
-                  object={course}
-                  title={course.courseName}
-                  caption={course.courseDescription}
-                  onClick={(newEditedCourse: Course) => {
-                    setEditedCourse(newEditedCourse);
-                    setIsEditMenuOpened(true);
-                  }}
-                />
-              </motion.div>
-            );
-          })}
-        </Stack>
-      </motion.div>
+      {/* <Box display="flex" justifyContent="center" width="100%">
+        <Pagination count={10} color="primary" size="large" sx={{ p: 2 }} />
+      </Box> */}
+
+      {!loading && error === null && (
+        <motion.div variants={container} initial="hidden" animate="show">
+          <Stack direction="column" spacing={2} sx={{ mt: 2 }}>
+            {courses.map((course) => {
+              return (
+                <motion.div key={course.id} variants={item}>
+                  <InfoCard<Course>
+                    object={course}
+                    title={course.course_name}
+                    caption={course.course_description}
+                    caption2={
+                      <Stack
+                        direction="row"
+                        display="flex"
+                        justifyContent="center"
+                        alignItems="center"
+                      >
+                        <ClockIcon
+                          color="secondary"
+                          sx={{ width: 32, height: 32, ml: 1 }}
+                        />
+                        <Typography
+                          variant="body1"
+                          color="secondary.main"
+                          textAlign="center"
+                          sx={{ p: 0, mr: 1, ml: 1 }}
+                        >
+                          {course.start_time}
+                          <Divider sx={{ borderColor: 'secondary.main' }} />
+                          {dayjs(course.start_time, 'HH:mm')
+                            .add(course.class_duration, 'minutes')
+                            .format('HH:mm')
+                            .toString()}
+                        </Typography>
+                      </Stack>
+                    }
+                    onClick={(newEditedCourse: Course) => {
+                      setEditedCourse(newEditedCourse);
+                      setIsEditMenuOpened(true);
+                    }}
+                  />
+                </motion.div>
+              );
+            })}
+          </Stack>
+        </motion.div>
+      )}
+
+      <AnimatePresence>
+        {error != null && (
+          <motion.div
+            key="loader"
+            initial={{ opacity: 0, scale: 0.5 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.5 }}
+            transition={{ duration: 0.3 }}
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <FailedToLoad message={error} caption="" refresh={refreshCourses} />
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {loading && (
+          <motion.div
+            key="loader"
+            initial={{ opacity: 0, scale: 0.5 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.5 }}
+            transition={{ duration: 0.3 }}
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <CircularProgress size="3rem" color="primary" />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   );
 }
