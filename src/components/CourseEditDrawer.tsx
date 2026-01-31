@@ -29,9 +29,7 @@ export function CourseEditDrawer({
   const [courseDescription, setCourseDescription] = useState(
     course?.course_description
   );
-  const [startTime, setStartTime] = useState<Dayjs | null>(
-    course?.start_time ? dayjs(course.start_time, 'HH:mm') : null
-  );
+  const [startTime, setStartTime] = useState<Dayjs | null>(null);
   const [classDuration, setClassDuration] = useState(course?.class_duration);
 
   useEffect(() => {

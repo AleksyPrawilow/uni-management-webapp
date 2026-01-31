@@ -24,9 +24,7 @@ export function CourseCreateDrawer({
 }: Prop) {
   const [courseName, setCourseName] = useState('');
   const [courseDescription, setCourseDescription] = useState('');
-  const [startTime, setStartTime] = useState<Dayjs | null>(
-    dayjs('10:00', 'HH:mm')
-  );
+  const [startTime, setStartTime] = useState<Dayjs | null>(null);
   const [classDuration, setClassDuration] = useState(45);
 
   return (
