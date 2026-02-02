@@ -272,10 +272,6 @@ export function StudentEditDrawer({
                     onClick={() => {
                       setShowBackdrop(true);
                       createEnrollment(
-                        Math.max(
-                          Math.max(...enrollments.map((item) => item.id)) + 1,
-                          1
-                        ),
                         courses.find(
                           (item) => item.course_name === courseToEnrollIn
                         ) ?? {

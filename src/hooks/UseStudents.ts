@@ -1,4 +1,3 @@
-// useUsersViewModel.ts
 import { useEffect, useState } from 'react';
 import { createClient } from '@supabase/supabase-js';
 import type { Student } from '../types/student';

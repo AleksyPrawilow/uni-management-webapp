@@ -7,7 +7,7 @@ const supabase = createClient(
   import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY
 );
 
-export function useEnrollmentParticipants() {
+export function useCourseParticipants() {
   const [participants, setParticipants] = useState<Student[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);

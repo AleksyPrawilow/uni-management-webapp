@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useEnrollmentParticipants } from '../hooks/useEnrollmentParticipants';
+import { useCourseParticipants } from '../hooks/UseCourseParticipants';
 import {
   Dialog,
   DialogTitle,
@@ -26,7 +26,7 @@ interface Prob {
 
 export function CourseModal({ open, courseId, onClose }: Prob) {
   const { participants, loading, error, refreshParticipants } =
-    useEnrollmentParticipants();
+    useCourseParticipants();
 
   useEffect(() => {
     refreshParticipants(courseId);

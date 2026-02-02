@@ -1,4 +1,3 @@
-// useUsersViewModel.ts
 import { useState } from 'react';
 import type { Course } from '../types/course';
 import type { Student } from '../types/student';
@@ -66,7 +65,6 @@ export function useEnrollments() {
   }
 
   async function createEnrollment(
-    newId: number,
     course: Course,
     student: Student,
     courses: Course[],
